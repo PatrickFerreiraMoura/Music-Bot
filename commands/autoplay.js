@@ -45,7 +45,7 @@ async function toggleAutoplay(client, interaction, lang) {
 
 module.exports = {
     name: 'autoplay',
-    description: 'Toggle autoplay for the server',
+    description: 'Alternar reprodução automática para o servidor',
     permissions: '0x0000000000000800',
     options: [
         {
