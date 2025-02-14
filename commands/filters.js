@@ -102,12 +102,12 @@ async function filters(client, interaction, lang) {
 
 module.exports = {
     name: "filters",
-    description: "Control audio filters with buttons",
+    description: "Controla filtros de áudio com botões",
     permissions: "0x0000000000000800",
     options: [
         {
             name: 'filter',
-            description: 'Select a filter to apply',
+            description: 'Selecione um filtro para aplicar',
             type: ApplicationCommandOptionType.String,
             required: true,
             choices: [
