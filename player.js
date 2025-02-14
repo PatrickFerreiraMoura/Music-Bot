@@ -104,7 +104,7 @@ function initializePlayer(client) {
             .setDescription(  
                 `- **Título:** [${track.info.title}](${track.info.uri})\n` +
                 `- **Autor:** ${track.info.author || 'Unknown Artist'}\n` +
-                `- **Duração** ${formatDuration(track.info.length)}\n` +
+                `- **Duração:** ${formatDuration(track.info.length)}\n` +
                 `- **Solicitante:** ${requester}\n` +
                 `- **Fonte:** ${track.info.sourceName}\n` + '**- Controles :**\n 🔁 `Loop`, ❌ `Desativar`, ⏭️ `Pular`, 📜 `Queue`, 🗑️ `Limpar`\n ⏹️ `Parar`, ⏸️ `Pausar`, ▶️ `Retomar`, 🔊 `Vol +`, 🔉 `Vol -`')
             .setImage('attachment://musicard.png')
@@ -250,12 +250,12 @@ async function handleInteraction(i, player, channel) {
             break;
         case 'clearQueue':
             player.queue.clear();
-            await sendEmbed(channel, "🗑️ **A fila foi limpa**");
+            await sendEmbed(channel, "🗑️ **A fila foi limpa.**");
             break;
         case 'stopTrack':
             player.stop();
             player.destroy();
-            await sendEmbed(channel, '⏹️ **A reprodução foi interrompida e o player apagado**');
+            await sendEmbed(channel, '⏹️ **A reprodução foi interrompida e o bot desconectado.**');
             break;
         case 'pauseTrack':
             if (player.paused) {
