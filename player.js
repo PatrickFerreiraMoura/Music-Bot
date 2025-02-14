@@ -16,7 +16,7 @@ async function sendMessageWithPermissionsCheck(channel, embed, attachment, actio
             !permissions.has(PermissionsBitField.Flags.EmbedLinks) ||
             !permissions.has(PermissionsBitField.Flags.AttachFiles) ||
             !permissions.has(PermissionsBitField.Flags.UseExternalEmojis)) {
-            console.error("Bot lacks necessary permissions to send messages in this channel.");
+            console.error("Bot não tem permissões necessárias para enviar mensagens neste canal.");
             return;
         }
 
@@ -30,7 +30,7 @@ async function sendMessageWithPermissionsCheck(channel, embed, attachment, actio
         console.error("Error sending message:", error.message);
         const errorEmbed = new EmbedBuilder()
             .setColor('#FF0000')
-            .setDescription("⚠️ **Unable to send message. Check bot permissions.**");
+            .setDescription("⚠️ **Não é possível enviar mensagem. Verificar permissões de bot.**");
         await channel.send({ embeds: [errorEmbed] });
     }
 }
@@ -102,11 +102,11 @@ function initializePlayer(client) {
             .setFooter({ text: `Developed by SSRR | Prime Music v1.2`, iconURL: musicIcons.heartIcon })
             .setTimestamp()
             .setDescription(  
-                `- **Title:** [${track.info.title}](${track.info.uri})\n` +
-                `- **Author:** ${track.info.author || 'Unknown Artist'}\n` +
-                `- **Length:** ${formatDuration(track.info.length)}\n` +
-                `- **Requester:** ${requester}\n` +
-                `- **Source:** ${track.info.sourceName}\n` + '**- Controls :**\n 🔁 `Loop`, ❌ `Disable`, ⏭️ `Skip`, 📜 `Queue`, 🗑️ `Clear`\n ⏹️ `Stop`, ⏸️ `Pause`, ▶️ `Resume`, 🔊 `Vol +`, 🔉 `Vol -`')
+                `- **Título:** [${track.info.title}](${track.info.uri})\n` +
+                `- **Autor:** ${track.info.author || 'Unknown Artist'}\n` +
+                `- **Duração** ${formatDuration(track.info.length)}\n` +
+                `- **Solicitante:** ${requester}\n` +
+                `- **Fonte:** ${track.info.sourceName}\n` + '**- Controles :**\n 🔁 `Loop`, ❌ `Desativar`, ⏭️ `Pular`, 📜 `Queue`, 🗑️ `Limpar`\n ⏹️ `Parar`, ⏸️ `Pausar`, ▶️ `Retomar`, 🔊 `Vol +`, 🔉 `Vol -`')
             .setImage('attachment://musicard.png')
             .setColor('#FF7A00');
 
@@ -126,7 +126,7 @@ function initializePlayer(client) {
             console.error("Error creating or sending music card:", error.message);
             const errorEmbed = new EmbedBuilder()
                 .setColor('#FF0000')
-                .setDescription("⚠️ **Unable to load track card. Continuing playback...**");
+                .setDescription("⚠️ **Não é possível carregar o cartão de rastreamento. Reprodução contínua...**");
             await channel.send({ embeds: [errorEmbed] });
         }
     });
@@ -156,17 +156,17 @@ function initializePlayer(client) {
     
                 if (!nextTrack) {
                     player.destroy();
-                    await channel.send("⚠️ **No more tracks to autoplay. Disconnecting...**");
+                    await channel.send("⚠️ **Não há mais faixas para reprodução automática. Desconectando...**");
                 }
             } else {
                 console.log(`Autoplay is disabled for guild: ${guildId}`);
                 player.destroy();
-                await channel.send("🎶 **Queue has ended. Autoplay is disabled.**");
+                await channel.send("🎶 **A fila acabou. A reprodução automática está desativada.**");
             }
         } catch (error) {
             console.error("Error handling autoplay:", error);
             player.destroy();
-            await channel.send("👾**Queue Empty! Disconnecting...**");
+            await channel.send("👾**Fila Vazia! Desconectando...**");
         }
     });
     
@@ -182,7 +182,7 @@ function initializePlayer(client) {
                 await message.edit({ components: [disabledRow1, disabledRow2] });
             }
         } catch (error) {
-            console.error("Failed to disable message components:", error);
+            console.error("Falha ao desativar componentes de mensagem:", error);
         }
     }
 }
@@ -217,7 +217,7 @@ function setupCollector(client, player, channel, message) {
         if (!voiceChannel || voiceChannel.id !== playerChannel) {
             const vcEmbed = new EmbedBuilder()
                 .setColor(config.embedColor)
-                .setDescription('🔒 **You need to be in the same voice channel to use the controls!**');
+                .setDescription('🔒 **Você precisa estar no mesmo canal de voz para usar os controles!**');
             const sentMessage = await channel.send({ embeds: [vcEmbed] });
             setTimeout(() => sentMessage.delete().catch(console.error), config.embedTimeout * 1000);
             return;
@@ -240,7 +240,7 @@ async function handleInteraction(i, player, channel) {
             break;
         case 'skipTrack':
             player.stop();
-            await sendEmbed(channel, "⏭️ **Player will play the next song!**");
+            await sendEmbed(channel, "⏭️ **O player vai tocar a próxima música!**");
             break;
         case 'disableLoop':
             disableLoop(player, channel);
@@ -250,27 +250,27 @@ async function handleInteraction(i, player, channel) {
             break;
         case 'clearQueue':
             player.queue.clear();
-            await sendEmbed(channel, "🗑️ **Queue has been cleared!**");
+            await sendEmbed(channel, "🗑️ **A fila foi limpa**");
             break;
         case 'stopTrack':
             player.stop();
             player.destroy();
-            await sendEmbed(channel, '⏹️ **Playback has been stopped and player destroyed!**');
+            await sendEmbed(channel, '⏹️ **A reprodução foi interrompida e o player apagado**');
             break;
         case 'pauseTrack':
             if (player.paused) {
-                await sendEmbed(channel, '⏸️ **Playback is already paused!**');
+                await sendEmbed(channel, '⏸️ **A reprodução já está pausada!**');
             } else {
                 player.pause(true);
-                await sendEmbed(channel, '⏸️ **Playback has been paused!**');
+                await sendEmbed(channel, '⏸️ **A reprodução foi pausada!**');
             }
             break;
         case 'resumeTrack':
             if (!player.paused) {
-                await sendEmbed(channel, '▶️ **Playback is already resumed!**');
+                await sendEmbed(channel, '▶️ **A reprodução já foi retomada!**');
             } else {
                 player.pause(false);
-                await sendEmbed(channel, '▶️ **Playback has been resumed!**');
+                await sendEmbed(channel, '▶️ **A reprodução foi retomada!**');
             }
             break;
         case 'volumeUp':
@@ -291,10 +291,10 @@ async function sendEmbed(channel, message) {
 function adjustVolume(player, channel, amount) {
     const newVolume = Math.min(100, Math.max(10, player.volume + amount));
     if (newVolume === player.volume) {
-        sendEmbed(channel, amount > 0 ? '🔊 **Volume is already at maximum!**' : '🔉 **Volume is already at minimum!**');
+        sendEmbed(channel, amount > 0 ? '🔊 **O volume já está no máximo!**' : '🔉 **O volume já está no mínimo!**');
     } else {
         player.setVolume(newVolume);
-        sendEmbed(channel, `🔊 **Volume changed to ${newVolume}%!**`);
+        sendEmbed(channel, `🔊 **Volume alterado para ${newVolume}%!**`);
     }
 }
 
@@ -312,17 +312,17 @@ function formatTrack(track) {
 
 function toggleLoop(player, channel) {
     player.setLoop(player.loop === "track" ? "queue" : "track");
-    sendEmbed(channel, player.loop === "track" ? "🔁 **Track loop is activated!**" : "🔁 **Queue loop is activated!**");
+    sendEmbed(channel, player.loop === "track" ? "🔁 **O loop da fila está ativado!**" : "🔁 **O loop da fila está ativado!**");
 }
 
 function disableLoop(player, channel) {
     player.setLoop("none");
-    sendEmbed(channel, "❌ **Loop is disabled!**");
+    sendEmbed(channel, "❌ **Loop está desativado!**");
 }
 
 function showQueue(channel) {
     if (queueNames.length === 0) {
-        sendEmbed(channel, "The queue is empty.");
+        sendEmbed(channel, "A fila está vazia.");
         return;
     }
     const queueChunks = [];
