@@ -68,12 +68,12 @@ async function remove(client, interaction, lang) {
 
 module.exports = {
     name: "remove",
-    description: "Remove a song from the queue by its position",
+    description: "Remove uma música da fila pela sua posição",
     permissions: "0x0000000000000800",
     options: [
         {
             name: 'position',
-            description: 'Position of the song to remove from the queue',
+            description: 'Posição da música a ser removida da fila',
             type: ApplicationCommandOptionType.Integer,
             required: true
         }
